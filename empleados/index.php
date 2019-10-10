@@ -11,6 +11,11 @@ $txtFoto = (isset($_FILES['txtFoto']["name"]))?$_POST['txtFoto']["name"]:"";
 //En esta linea lo que se hace es recibir el "value" del boton, para luego evaluar el value en el switch 
 $accion = (isset($_POST['accion']))?$_POST['accion']:"";
 
+//Accion en los botones, en estas lineas se desabilitan los botones modifcicar eliminar y cancelar, solo se deja el boton agregar habilitado
+$accionAgregar="";
+$accionModificar=$accionEliminar=$accionCancelar="disabled";
+$mostrarModal=false;
+
 //Referencia al archivo de la conexion, la cual esta creada en la carpeta conexion
 include("../conexion/conexion.php");
 
@@ -95,8 +100,14 @@ switch($accion){
         break;
 
     case "btnCancelar":
-        echo "Presionaste el boton btnCancelar";
-        break;    
+        header('Location: index.php');
+        break;
+        
+    case "Seleccionar":
+        $accionAgregar="disabled";
+        $accionModificar=$accionEliminar=$accionCancelar="";
+        $mostrarModal=true;
+        break;
 }
 
 //Declaracion de la sentenci SQL en la variable $sentecia
@@ -118,6 +129,12 @@ $listaEmpleados=$sentencia->fetchAll(PDO::FETCH_ASSOC);
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <style>
+            body{
+                background-color: aqua;
+                padding: 20px;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
@@ -164,10 +181,10 @@ $listaEmpleados=$sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button value="btnAgregar" class="btn btn-success" type="submit" name="accion">Agregar</button>
-                                <button value="btnModificar" class="btn btn-warning" type="submit" name="accion">Modificar</button>
-                                <button value="btnEliminar" class="btn btn-danger" type="submit" name="accion">Eliminar</button>
-                                <button value="btnCancelar" class="btn btn-primary" type="submit" name="accion">Cancelar</button>
+                                <button value="btnAgregar" <?php echo $accionAgregar?> class="btn btn-success" type="submit" name="accion">Agregar</button>
+                                <button value="btnModificar" <?php echo $accionModificar?> class="btn btn-warning" type="submit" name="accion">Modificar</button>
+                                <button value="btnEliminar" <?php echo $accionEliminar?> class="btn btn-danger" type="submit" name="accion">Eliminar</button>
+                                <button value="btnCancelar" <?php echo $accionCancelar?> class="btn btn-primary" type="submit" name="accion">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -208,8 +225,8 @@ $listaEmpleados=$sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <input type="hidden" name="txtCorreo" value="<?php echo $empleado['Correo']; ?>">
                                 <input type="hidden" name="txtFoto" value="<?php echo $empleado['Foto']; ?>">
 
-                                <input type="submit" value="Seleccionar" name="accion">
-                                <button value="btnEliminar" type="submit" name="accion">Eliminar</button>
+                                <input type="submit" class="btn btn-info" value="Seleccionar" name="accion">
+                                <button value="btnEliminar" class="btn btn-danger" type="submit" name="accion">Eliminar</button>
 
                             </form>
                         </td>
@@ -217,6 +234,11 @@ $listaEmpleados=$sentencia->fetchAll(PDO::FETCH_ASSOC);
                     <?php }?>
                 </table>
             </div>
+            <?php if($mostrarModal){ ?>
+                <script>
+                    $('#exampleModal').modal('show');
+                </script>
+            <?php } ?>
         </div>
     </body>
 </html>
