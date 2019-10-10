@@ -6,8 +6,7 @@ $txtNombre = (isset($_POST['txtNombre']))?$_POST['txtNombre']:"";
 $txtApellidoP = (isset($_POST['txtApellidoP']))?$_POST['txtApellidoP']:"";
 $txtApellidoM = (isset($_POST['txtApellidoM']))?$_POST['txtApellidoM']:"";
 $txtCorreo = (isset($_POST['txtCorreo']))?$_POST['txtCorreo']:"";
-//Opcion para subir imagenes
-//$txtFoto = (isset($_FILES['txtFoto']["name"]))?$_POST['txtFoto']["name"]:"";
+$txtFoto = (isset($_FILES['txtFoto']["name"]))?$_POST['txtFoto']["name"]:"";
 
 //En esta linea lo que se hace es recibir el "value" del boton, para luego evaluar el value en el switch 
 $accion = (isset($_POST['accion']))?$_POST['accion']:"";
@@ -27,18 +26,18 @@ switch($accion){
         $sentencia->bindParam(':ApellidoM', $txtApellidoM);
         $sentencia->bindParam(':Correo', $txtCorreo);
 
-//        $Fecha= new DateTime();
-//
-//        $nombreArchivo=($txtFoto != "")?$Fecha->getTimestamp()."_".$_FILES["txtFoto"]["name"]:"imagen.jpg";
-//        error_reporting(error_reporting() & ~E_NOTICE);
-//        $tmpFoto = $_FILES['txtFoto']["tmp_name"];
-//
-//        if($tmpFoto != ""){
-//            move_uploaded_file($tmpFoto, "../imagenes/".$nombreArchivo);
-//        }
-//
-//        $sentencia->bindParam(':Foto', $nombreArchivo);
-//        $sentencia->execute();
+        $Fecha= new DateTime();
+
+        $nombreArchivo=($txtFoto != "")?$Fecha->getTimestamp()."_".$_FILES["txtFoto"]["name"]:"imagen.jpg";
+        error_reporting(error_reporting() & ~E_NOTICE);
+        $tmpFoto = $_FILES['txtFoto']["tmp_name"];
+
+        if($tmpFoto != ""){
+            move_uploaded_file($tmpFoto, "../imagenes/".$nombreArchivo);
+        }
+
+        $sentencia->bindParam(':Foto', $nombreArchivo);
+        $sentencia->execute();
 
         echo $txtId;
         echo "Presionaste el boton btnAgregar";
@@ -61,20 +60,20 @@ switch($accion){
         $sentencia->bindParam(':id', $txtId);
         $sentencia->execute();
 
-//        $Fecha= new DateTime();
-//
-//        $nombreArchivo=($txtFoto != "")?$Fecha->getTimestamp()."_".$_FILES["txtFoto"]["name"]:"imagen.jpg";
-//        error_reporting(error_reporting() & ~E_NOTICE);
-//        $tmpFoto = $_FILES['txtFoto']["tmp_name"];
-//
-//        if($tmpFoto != ""){
-//            move_uploaded_file($tmpFoto, "../imagenes/".$nombreArchivo);
-//
-//            $sentencia = $pdo->prepare("UPDATE empleados SET Foto=:Foto WHERE id=:id");
-//            $sentencia->bindParam(':Foto', $txtFoto);
-//            $sentencia->bindParam(':id', $txtId);
-//            $sentencia->execute();
-//        }
+        $Fecha= new DateTime();
+
+        $nombreArchivo=($txtFoto != "")?$Fecha->getTimestamp()."_".$_FILES["txtFoto"]["name"]:"imagen.jpg";
+        error_reporting(error_reporting() & ~E_NOTICE);
+        $tmpFoto = $_FILES['txtFoto']["tmp_name"];
+
+        if($tmpFoto != ""){
+            move_uploaded_file($tmpFoto, "../imagenes/".$nombreArchivo);
+
+            $sentencia = $pdo->prepare("UPDATE empleados SET Foto=:Foto WHERE id=:id");
+            $sentencia->bindParam(':Foto', $txtFoto);
+            $sentencia->bindParam(':id', $txtId);
+            $sentencia->execute();
+        }
 
 
         //Redireccionamiento a una pagina, en este caso se esta re direccionando a la misma página
